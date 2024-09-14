@@ -62,11 +62,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(40))),
                           onPressed: () {
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //       builder: (context) => RegisterScreen(),
-                            //     ));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => RegisterScreen(),
+                                ));
                           },
                           icon: Icon(Icons.arrow_forward_ios_outlined)),
                     ),
