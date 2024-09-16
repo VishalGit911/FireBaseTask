@@ -11,10 +11,9 @@ class NumberAdd extends StatefulWidget {
 
 class _NumberAddState extends State<NumberAdd> {
   TextEditingController mobileController = TextEditingController();
-
   final globalKey = GlobalKey<FormState>();
+  bool isLoading = false; // Fixed typo here
 
-  bool isloding = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,14 +46,12 @@ class _NumberAddState extends State<NumberAdd> {
                     child: TextFormField(
                       controller: mobileController,
                       validator: (value) {
-                        setState(() {
-                          print(value);
-                          if (value!.isEmpty) {
-                            print("value null");
-                          } else if (value.length != 10) {
-                            print("value not 10");
-                          }
-                        });
+                        if (value == null || value.isEmpty) {
+                          return "Please enter your mobile number";
+                        } else if (value.length != 10) {
+                          return "Mobile number must be 10 digits";
+                        }
+                        return null;
                       },
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -62,6 +59,7 @@ class _NumberAddState extends State<NumberAdd> {
                               borderRadius: BorderRadius.circular(10)),
                           prefixText: "+91  ",
                           hintStyle: TextStyle(fontSize: 20)),
+                      keyboardType: TextInputType.phone,
                     ),
                   ),
                   Center(
@@ -71,7 +69,7 @@ class _NumberAddState extends State<NumberAdd> {
                           onPressed: () async {
                             if (globalKey.currentState!.validate()) {
                               setState(() {
-                                isloding = true;
+                                isLoading = true;
                               });
 
                               try {
@@ -85,32 +83,44 @@ class _NumberAddState extends State<NumberAdd> {
                                     await FirebaseAuth.instance
                                         .signInWithCredential(
                                             phoneAuthCredential);
-
-                                    print("----------complate------");
+                                    print("Verification completed");
                                   },
                                   verificationFailed: (error) {
-                                    print("-------field------");
+                                    final snackbar = SnackBar(
+                                        content:
+                                            Text("Failed : ${error.message}"));
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackbar);
+
+                                    print(
+                                        "Verification failed: ${error.message}");
+                                    setState(() {
+                                      isLoading = false;
+                                    });
                                   },
                                   codeSent:
                                       (verificationId, forceResendingToken) {
-                                    print("------otp send ----");
+                                    print("OTP sent");
+                                    setState(() {
+                                      isLoading = false;
+                                    });
                                   },
                                   codeAutoRetrievalTimeout: (verificationId) {},
                                 );
-                              } catch (e) {}
+                              } catch (e) {
+                                print("Error: $e");
+                                setState(() {
+                                  isLoading = false;
+                                });
+                              }
                             }
-
-                            setState(() {});
                           },
-                          text:
-                              // text: isloding == true
-                              // ? CircularProgressIndicator(
-                              //     color: Colors.white,
-                              //   ) :
-                              Text(
-                            "Conform",
-                            style: TextStyle(fontSize: 20),
-                          ),
+                          text: isLoading
+                              ? CircularProgressIndicator(color: Colors.white)
+                              : Text(
+                                  "Confirm",
+                                  style: TextStyle(fontSize: 20),
+                                ),
                           backgroundColor: Colors.green.shade800,
                           foregroundColor: Colors.white),
                     ),
@@ -118,14 +128,15 @@ class _NumberAddState extends State<NumberAdd> {
                 ],
               ),
               SafeArea(
-                  child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(Icons.arrow_back_ios)),
-              )),
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(Icons.arrow_back_ios)),
+                ),
+              ),
             ],
           ),
         ),
@@ -133,4 +144,3 @@ class _NumberAddState extends State<NumberAdd> {
     );
   }
 }
-
