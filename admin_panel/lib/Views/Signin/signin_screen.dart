@@ -64,6 +64,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 padding: const EdgeInsets.only(
                     left: 20, right: 20, top: 20, bottom: 5),
                 child: TextFormField(
+                  obscureText: isvisibility,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Entere valid password";
@@ -87,26 +88,29 @@ class _SignInScreenState extends State<SignInScreen> {
               Padding(
                 padding: const EdgeInsets.only(top: 50),
                 child: Center(
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.green.shade800,
-                          fixedSize: Size(400, 60)),
-                      onPressed: () {
-                        signincheck(
-                            email: emailcontroller.text.toString(),
-                            password: passwordcontroller.text.toString());
-                      },
-                      child: isloading
-                          ? CircularProgressIndicator(
-                              color: Colors.white,
-                            )
-                          : Text(
-                              "SignIn",
-                              style: TextStyle(fontSize: 20),
-                            )),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.green.shade800,
+                            fixedSize: Size(400, 60)),
+                        onPressed: () {
+                          signincheck(
+                              email: emailcontroller.text.toString(),
+                              password: passwordcontroller.text.toString());
+                        },
+                        child: isloading
+                            ? CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                            : Text(
+                                "SignIn",
+                                style: TextStyle(fontSize: 20),
+                              )),
+                  ),
                 ),
               )
             ],
