@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shimmer/shimmer.dart';
 
 class CategoryAdd extends StatefulWidget {
   const CategoryAdd({super.key});
@@ -10,6 +9,8 @@ class CategoryAdd extends StatefulWidget {
 }
 
 class _CategoryAddState extends State<CategoryAdd> {
+  XFile? newimage;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,19 +29,12 @@ class _CategoryAddState extends State<CategoryAdd> {
 // Pick an image.
                 final XFile? image =
                     await picker.pickImage(source: ImageSource.gallery);
+
+                newimage = image;
               },
-              child: Shimmer(
-                  child: CircleAvatar(
-                    radius: 100,
-                  ),
-                  gradient: LinearGradient(
-                    colors: [
-                      Color(0xFFEBEBF4),
-                      Color(0xFFF4F4F4),
-                      Color(0xFFEBEBF4),
-                    ],
-                    stops: [0.1, 0.3, 0.4],
-                  )),
+              child: CircleAvatar(
+                radius: 100,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 30, left: 15, right: 15),

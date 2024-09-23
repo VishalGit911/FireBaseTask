@@ -1,4 +1,7 @@
+import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 class FirebaseServices {
   static FirebaseServices instance = FirebaseServices.named();
@@ -10,6 +13,7 @@ class FirebaseServices {
   }
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
 
   Future<User?> gmailPasswordLogin(
       {required String email, required String password}) async {
@@ -20,6 +24,30 @@ class FirebaseServices {
       return credenial.user;
     } catch (e) {
       rethrow;
+    }
+  }
+
+  Future<void> addcategoryinfirebase({createdAdt, XFile? image}) async {
+    int? timstamp = createdAdt ?? DateTime.now().millisecondsSinceEpoch;
+
+    print("Time Stamp = $timstamp");
+
+    if (image != null) {
+      String? filename = "${DateTime.now().millisecondsSinceEpoch}";
+
+      print("Filename = $filename");
+
+      File file = File(image.path);
+
+      print("image path =$file");
+
+      TaskSnapshot snapshot = await _firebaseStorage
+          .ref()
+          .child("category")
+          .child(filename)
+          .putFile(file);
+
+      print("File Upload Successfully");
     }
   }
 }
