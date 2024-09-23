@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -25,14 +27,41 @@ class _CategoryAddState extends State<CategoryAdd> {
           children: [
             GestureDetector(
               onTap: () async {
-                final ImagePicker picker = ImagePicker();
-// Pick an image.
-                final XFile? image =
-                    await picker.pickImage(source: ImageSource.gallery);
-
-                newimage = image;
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text("Select Image Source"),
+                      content: SingleChildScrollView(
+                        child: ListBody(
+                          children: <Widget>[
+                            ListTile(
+                              leading: const Icon(Icons.camera),
+                              title: const Text("Camera"),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                pickImage(source: ImageSource.camera);
+                              },
+                            ),
+                            ListTile(
+                              leading: const Icon(Icons.photo_library),
+                              title: const Text("Gallery"),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                pickImage(source: ImageSource.gallery);
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
               },
               child: CircleAvatar(
+                backgroundImage: newimage != null
+                    ? FileImage(File(newimage!.path))
+                    : AssetImage("assets/images/logo.png") as ImageProvider,
                 radius: 100,
               ),
             ),
@@ -72,5 +101,18 @@ class _CategoryAddState extends State<CategoryAdd> {
         ),
       ),
     );
+  }
+
+  Future<void> pickImage({required source}) async {
+    final ImagePicker picker = ImagePicker();
+
+    final XFile? image = await picker.pickImage(source: source);
+
+    if (image != null) {
+      setState(() {
+        newimage = image;
+        print("File image path --> ${newimage!.path.toString()}");
+      });
+    }
   }
 }

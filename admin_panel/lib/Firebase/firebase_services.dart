@@ -33,6 +33,8 @@ class FirebaseServices {
     print("Time Stamp = $timstamp");
 
     if (image != null) {
+      String? newimageUrl;
+
       String? filename = "${DateTime.now().millisecondsSinceEpoch}";
 
       print("Filename = $filename");
@@ -48,6 +50,8 @@ class FirebaseServices {
           .putFile(file);
 
       print("File Upload Successfully");
+
+      newimageUrl = await snapshot.ref.getDownloadURL();
     }
   }
 }
