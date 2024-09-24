@@ -101,6 +101,7 @@ class _CategoryAddState extends State<CategoryAdd> {
                       backgroundColor: Colors.green.shade800,
                       foregroundColor: Colors.white),
                   onPressed: () {
+                    print("Button Precced----------------------------");
                     FirebaseServices().addcategory(
                         categoryname: categorynamecontroller.text.toString(),
                         description:

@@ -37,12 +37,15 @@ class FirebaseServices {
     XFile? image,
     int? createdAt,
     String? categoryId,
+    String? existingImageUrl,
     required BuildContext context,
   }) async {
+    print("call add category function------------------");
     String? newImageUrl;
 
     int? timstamp = createdAt ?? DateTime.now().millisecondsSinceEpoch;
 
+    newImageUrl = existingImageUrl ?? "";
     if (image != null) {
       String? filename = "${DateTime.now().millisecondsSinceEpoch}.png";
 
@@ -55,29 +58,56 @@ class FirebaseServices {
           .putFile(file);
 
       newImageUrl = await snapshot.ref.getDownloadURL();
+
+      print("Image Upload Successfully---------------------");
     }
 
     CategoryModel category = CategoryModel(
         name: categoryname!,
         description: description!,
-        imageURL: newImageUrl!,
-        isactive: true,
+        imageUrl: newImageUrl,
+        isActive: true,
         createdAt: timstamp,
         id: categoryId);
 
-    if (category.id != null) {
+    if (category.id == null) {
+      print("successfully-------------------------------------");
+
       String? newIdGenerate =
           _firebaseDatabase.ref().child("category").push().key;
-
+      print("NewGenerateId = $newIdGenerate");
       category.id = newIdGenerate;
       await _firebaseDatabase
           .ref()
           .child("category")
           .child(newIdGenerate!)
-          .set(category.tojson());
+          .set(category.toJson());
+
+      print("Category add successfully");
 
       Navigator.pop(context);
     }
+  }
+
+  Stream<List<CategoryModel>> getcategory() {
+    List<CategoryModel> categoryList = [];
+    return _firebaseDatabase.ref().child("category").onValue.map(
+      (event) {
+        if (event.snapshot.exists) {
+          Map<dynamic, dynamic> categoryMap =
+              event.snapshot.value as Map<dynamic, dynamic>;
+
+          categoryMap.forEach(
+            (key, value) {
+              CategoryModel categoryModel = CategoryModel.fromJson(value);
+
+              categoryList.add(categoryModel);
+            },
+          );
+        }
+        return categoryList;
+      },
+    );
   }
 }
 
