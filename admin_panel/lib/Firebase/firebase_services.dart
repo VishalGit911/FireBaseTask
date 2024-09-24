@@ -1,6 +1,9 @@
 import 'dart:io';
+import 'package:admin_panel/Model/category_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 
 class FirebaseServices {
@@ -14,6 +17,7 @@ class FirebaseServices {
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
+  final FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
 
   Future<User?> gmailPasswordLogin(
       {required String email, required String password}) async {
@@ -27,21 +31,22 @@ class FirebaseServices {
     }
   }
 
-  Future<void> addcategoryinfirebase({createdAdt, XFile? image}) async {
-    int? timstamp = createdAdt ?? DateTime.now().millisecondsSinceEpoch;
+  Future<void> addcategory({
+    String? categoryname,
+    String? description,
+    XFile? image,
+    int? createdAt,
+    String? categoryId,
+    required BuildContext context,
+  }) async {
+    String? newImageUrl;
 
-    print("Time Stamp = $timstamp");
+    int? timstamp = createdAt ?? DateTime.now().millisecondsSinceEpoch;
 
     if (image != null) {
-      String? newimageUrl;
-
-      String? filename = "${DateTime.now().millisecondsSinceEpoch}";
-
-      print("Filename = $filename");
+      String? filename = "${DateTime.now().millisecondsSinceEpoch}.png";
 
       File file = File(image.path);
-
-      print("image path =$file");
 
       TaskSnapshot snapshot = await _firebaseStorage
           .ref()
@@ -49,9 +54,29 @@ class FirebaseServices {
           .child(filename)
           .putFile(file);
 
-      print("File Upload Successfully");
+      newImageUrl = await snapshot.ref.getDownloadURL();
+    }
 
-      newimageUrl = await snapshot.ref.getDownloadURL();
+    CategoryModel category = CategoryModel(
+        name: categoryname!,
+        description: description!,
+        imageURL: newImageUrl!,
+        isactive: true,
+        createdAt: timstamp,
+        id: categoryId);
+
+    if (category.id != null) {
+      String? newIdGenerate =
+          _firebaseDatabase.ref().child("category").push().key;
+
+      category.id = newIdGenerate;
+      await _firebaseDatabase
+          .ref()
+          .child("category")
+          .child(newIdGenerate!)
+          .set(category.tojson());
+
+      Navigator.pop(context);
     }
   }
 }
