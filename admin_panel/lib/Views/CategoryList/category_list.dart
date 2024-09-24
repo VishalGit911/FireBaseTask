@@ -1,6 +1,5 @@
 import 'package:admin_panel/Firebase/firebase_services.dart';
 import 'package:admin_panel/Views/CategoryAdd/category_add.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class CategoryList extends StatefulWidget {
@@ -54,6 +53,8 @@ class _CategoryListState extends State<CategoryList> {
                   return Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Card(
+                      shadowColor: Colors.black,
+                      elevation: 5,
                       child: ListTile(
                         title: Text(value.name),
                         subtitle: Text(value.description),
@@ -62,16 +63,16 @@ class _CategoryListState extends State<CategoryList> {
                         ),
                         trailing: IconButton(
                             onPressed: () {
-                              FirebaseDatabase.instance
-                                  .ref()
-                                  .child("category")
-                                  .child(value.id.toString())
-                                  .remove()
-                                  .then(
-                                (value) {
-                                  setState(() {});
-                                },
-                              );
+                              // FirebaseDatabase.instance
+                              //     .ref()
+                              //     .child("category")
+                              //     .child(value.id.toString())
+                              //     .remove()
+                              //     .then(
+                              //   (value) {
+                              //     setState(() {});
+                              //   },
+                              // );
                             },
                             icon: Icon(Icons.delete)),
                       ),
