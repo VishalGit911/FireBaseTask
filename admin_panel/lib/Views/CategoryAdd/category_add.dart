@@ -1,26 +1,39 @@
 import 'dart:io';
 
 import 'package:admin_panel/Firebase/firebase_services.dart';
+import 'package:admin_panel/Model/category_model.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CategoryAdd extends StatefulWidget {
-  const CategoryAdd({super.key});
+  CategoryModel? categoryModel;
+
+  CategoryAdd({super.key, this.categoryModel});
 
   @override
   State<CategoryAdd> createState() => _CategoryAddState();
 }
 
 class _CategoryAddState extends State<CategoryAdd> {
+  @override
+  void initState() {
+    if (widget.categoryModel != null) {
+      categorynamecontroller.text = widget.categoryModel!.name;
+      categorydescriptioncontroller.text = widget.categoryModel!.description;
+      existingImageUrl = widget.categoryModel!.imageUrl;
+    }
+
+    super.initState();
+  }
+
   XFile? newimage;
   TextEditingController categorynamecontroller = TextEditingController();
   TextEditingController categorydescriptioncontroller = TextEditingController();
+  String? existingImageUrl;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Add Category"),
-      ),
+      appBar: AppBar(),
       body: Container(
         height: double.infinity,
         width: double.infinity,
@@ -63,11 +76,14 @@ class _CategoryAddState extends State<CategoryAdd> {
                 },
                 child: CircleAvatar(
                   backgroundColor: Colors.green.shade200,
-                  backgroundImage: newimage != null
-                      ? FileImage(File(newimage!.path))
-                      : NetworkImage(
-                              "https://www.freeiconspng.com/thumbs/add-icon-png/add-icon--endless-icons-21.png")
-                          as ImageProvider,
+                  backgroundImage: existingImageUrl != null && newimage == null
+                      ? NetworkImage(existingImageUrl!)
+                      : newimage != null
+                          ? FileImage(
+                              File(newimage!.path),
+                            )
+                          : const AssetImage("assets/images/app_logo.png")
+                              as ImageProvider,
                   radius: 100,
                 ),
               ),
@@ -103,6 +119,7 @@ class _CategoryAddState extends State<CategoryAdd> {
                   onPressed: () {
                     print("Button Precced----------------------------");
                     FirebaseServices().addcategory(
+                        categoryId: widget.categoryModel?.id,
                         categoryname: categorynamecontroller.text.toString(),
                         description:
                             categorydescriptioncontroller.text.toString(),

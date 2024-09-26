@@ -10,10 +10,6 @@ class CategoryList extends StatefulWidget {
 }
 
 class _CategoryListState extends State<CategoryList> {
-  void refresh() {
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,29 +48,32 @@ class _CategoryListState extends State<CategoryList> {
 
                   return Padding(
                     padding: const EdgeInsets.all(12.0),
-                    child: Card(
-                      shadowColor: Colors.black,
-                      elevation: 5,
-                      child: ListTile(
-                        title: Text(value.name),
-                        subtitle: Text(value.description),
-                        leading: CircleAvatar(
-                          backgroundImage: NetworkImage(value.imageUrl),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CategoryAdd(
+                                categoryModel: snapshot.data![index],
+                              ),
+                            ));
+                      },
+                      child: Card(
+                        shadowColor: Colors.black,
+                        elevation: 5,
+                        child: ListTile(
+                          title: Text(value.name),
+                          subtitle: Text(value.description),
+                          leading: CircleAvatar(
+                            backgroundImage: NetworkImage(value.imageUrl),
+                          ),
+                          trailing: IconButton(
+                              onPressed: () {
+                                FirebaseServices().categorydelet(
+                                    categoryid: value.id.toString());
+                              },
+                              icon: Icon(Icons.delete)),
                         ),
-                        trailing: IconButton(
-                            onPressed: () {
-                              // FirebaseDatabase.instance
-                              //     .ref()
-                              //     .child("category")
-                              //     .child(value.id.toString())
-                              //     .remove()
-                              //     .then(
-                              //   (value) {
-                              //     setState(() {});
-                              //   },
-                              // );
-                            },
-                            icon: Icon(Icons.delete)),
                       ),
                     ),
                   );

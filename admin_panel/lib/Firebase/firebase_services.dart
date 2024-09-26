@@ -71,12 +71,13 @@ class FirebaseServices {
         id: categoryId);
 
     if (category.id == null) {
-      print("successfully-------------------------------------");
-
       String? newIdGenerate =
-          _firebaseDatabase.ref().child("category").push().key;
+          _firebaseDatabase.ref().child("Category").push().key;
+
       print("NewGenerateId = $newIdGenerate");
+
       category.id = newIdGenerate;
+
       await _firebaseDatabase
           .ref()
           .child("category")
@@ -84,6 +85,16 @@ class FirebaseServices {
           .set(category.toJson());
 
       print("Category add successfully");
+
+      Navigator.pop(context);
+    } else {
+      _firebaseDatabase
+          .ref()
+          .child("category")
+          .child(categoryId!)
+          .update(category.toJson());
+
+      print("category Updated Successfully");
 
       Navigator.pop(context);
     }
@@ -108,6 +119,10 @@ class FirebaseServices {
         return categoryList;
       },
     );
+  }
+
+  Future<void> categorydelet({required String categoryid}) async {
+    await _firebaseDatabase.ref().child("category").child(categoryid).remove();
   }
 }
 

@@ -1,4 +1,5 @@
 import 'package:admin_panel/Views/CategoryList/category_list.dart';
+import 'package:admin_panel/Views/ProductList/product_list.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -41,7 +42,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Colors.green.shade400,
                     text: "Product",
                     image: "assets/images/product.png",
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductList(),
+                          ));
+                    },
                   ),
                 ],
               ),
