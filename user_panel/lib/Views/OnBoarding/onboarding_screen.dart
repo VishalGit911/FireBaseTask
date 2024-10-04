@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:user_panel/Views/Home/home_screen.dart';
 
 import '../../Wieget/common_botton.dart';
 import '../SignIn/signin_screen.dart';
@@ -63,7 +64,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                 Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => SignInScreen(),
+                                    builder: (context) => HomeScreen(),
                                   ),
                                   (route) => false,
                                 );

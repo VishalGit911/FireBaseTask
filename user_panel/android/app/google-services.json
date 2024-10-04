@@ -1,13 +1,14 @@
 {
   "project_info": {
-    "project_number": "812976997150",
-    "project_id": "fruit-app-5e199",
-    "storage_bucket": "fruit-app-5e199.appspot.com"
+    "project_number": "378642322754",
+    "firebase_url": "https://grocery-app-cad3f-default-rtdb.firebaseio.com",
+    "project_id": "grocery-app-cad3f",
+    "storage_bucket": "grocery-app-cad3f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:812976997150:android:59f23e37777d14b87dbf0f",
+        "mobilesdk_app_id": "1:378642322754:android:5628b807f78f10582f64db",
         "android_client_info": {
           "package_name": "com.example.admin_panel"
         }
@@ -15,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCfKTjzO437DcHpCoH2AKzjCGnBZ11sB2I"
+          "current_key": "AIzaSyCCo76xg8rGkANqooquHMFSjR4aT6FFkqM"
         }
       ],
       "services": {
@@ -26,7 +27,7 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:812976997150:android:733794e9ddb8525d7dbf0f",
+        "mobilesdk_app_id": "1:378642322754:android:6c53dc49dd1114d02f64db",
         "android_client_info": {
           "package_name": "com.example.user_panel"
         }
@@ -34,7 +35,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCfKTjzO437DcHpCoH2AKzjCGnBZ11sB2I"
+          "current_key": "AIzaSyCCo76xg8rGkANqooquHMFSjR4aT6FFkqM"
         }
       ],
       "services": {

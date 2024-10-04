@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => CategoryList(),
+                            builder: (context) => CategoryListScreen(),
                           ));
                     },
                   ),
@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ProductList(),
+                            builder: (context) => ProductListScreen(),
                           ));
                     },
                   ),

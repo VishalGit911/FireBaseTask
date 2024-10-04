@@ -1,5 +1,6 @@
 import 'package:admin_panel/Firebase/firebase_services.dart';
 import 'package:admin_panel/Views/Home/home_screen.dart';
+import 'package:admin_panel/Widget/common_botton.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -85,34 +86,14 @@ class _SignInScreenState extends State<SignInScreen> {
                           borderRadius: BorderRadius.circular(15))),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 50),
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15)),
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.green.shade800,
-                            fixedSize: Size(400, 60)),
-                        onPressed: () {
-                          signincheck(
-                              email: emailcontroller.text.toString(),
-                              password: passwordcontroller.text.toString());
-                        },
-                        child: isloading
-                            ? CircularProgressIndicator(
-                                color: Colors.white,
-                              )
-                            : Text(
-                                "SignIn",
-                                style: TextStyle(fontSize: 20),
-                              )),
-                  ),
-                ),
-              )
+              CommonBotton(
+                  isloading: isloading,
+                  onPressed: () {
+                    signincheck(
+                        email: emailcontroller.text.toString(),
+                        password: passwordcontroller.text.toString());
+                  },
+                  text: "Signin")
             ],
           ),
         ),
@@ -127,8 +108,8 @@ class _SignInScreenState extends State<SignInScreen> {
       });
 
       try {
-        final user = await FirebaseServices()
-            .gmailPasswordLogin(email: email, password: password);
+        final user = await FirebaseServicies()
+            .signInWithEmailAndPassword(email: email, password: password);
 
         if (user != null) {
           if (kDebugMode) {

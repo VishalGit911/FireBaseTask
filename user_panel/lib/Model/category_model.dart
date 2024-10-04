@@ -8,11 +8,11 @@ class CategoryModel {
 
   CategoryModel(
       {this.id,
-      required this.name,
-      required this.description,
-      required this.imageUrl,
-      required this.isActive,
-      required this.createdAt});
+        required this.name,
+        required this.description,
+        required this.imageUrl,
+        required this.isActive,
+        required this.createdAt});
 
   Map<String, dynamic> toJson() {
     return {

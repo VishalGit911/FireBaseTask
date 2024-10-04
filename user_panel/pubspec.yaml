@@ -38,6 +38,7 @@ dependencies:
   firebase_core:
   firebase_auth:
   pin_code_fields:
+  firebase_database:
 
 dev_dependencies:
   flutter_test:

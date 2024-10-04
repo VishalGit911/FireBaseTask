@@ -1,152 +1,143 @@
+import 'dart:developer';
 import 'dart:io';
-
-import 'package:admin_panel/Firebase/firebase_services.dart';
-import 'package:admin_panel/Model/category_model.dart';
+import 'package:admin_panel/Widget/common_botton.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../Firebase/firebase_services.dart';
+import '../../Model/category_model.dart';
 
-class CategoryAdd extends StatefulWidget {
+class CategoryManageScreen extends StatefulWidget {
   CategoryModel? categoryModel;
 
-  CategoryAdd({super.key, this.categoryModel});
+  CategoryManageScreen({super.key, this.categoryModel});
 
   @override
-  State<CategoryAdd> createState() => _CategoryAddState();
+  State<CategoryManageScreen> createState() => _CategoryManageScreenState();
 }
 
-class _CategoryAddState extends State<CategoryAdd> {
+class _CategoryManageScreenState extends State<CategoryManageScreen> {
   @override
   void initState() {
     if (widget.categoryModel != null) {
-      categorynamecontroller.text = widget.categoryModel!.name;
-      categorydescriptioncontroller.text = widget.categoryModel!.description;
+      categoryName.text = widget.categoryModel!.name;
+      categoryDescription.text = widget.categoryModel!.description;
       existingImageUrl = widget.categoryModel!.imageUrl;
     }
-
     super.initState();
   }
 
-  XFile? newimage;
-  TextEditingController categorynamecontroller = TextEditingController();
-  TextEditingController categorydescriptioncontroller = TextEditingController();
+  XFile? newImage;
+
+  final categoryName = TextEditingController();
+  final categoryDescription = TextEditingController();
+
+  final formKey = GlobalKey<FormState>();
+
+  bool isLoading = false;
+
   String? existingImageUrl;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              GestureDetector(
-                onTap: () async {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text("Select Image Source"),
-                        content: SingleChildScrollView(
-                          child: ListBody(
-                            children: <Widget>[
-                              ListTile(
-                                leading: const Icon(Icons.camera),
-                                title: const Text("Camera"),
-                                onTap: () {
-                                  Navigator.of(context).pop();
-                                  pickImage(source: ImageSource.camera);
-                                },
-                              ),
-                              ListTile(
-                                leading: const Icon(Icons.photo_library),
-                                title: const Text("Gallery"),
-                                onTap: () {
-                                  Navigator.of(context).pop();
-                                  pickImage(source: ImageSource.gallery);
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-                child: CircleAvatar(
-                  backgroundColor: Colors.green.shade200,
-                  backgroundImage: existingImageUrl != null && newimage == null
-                      ? NetworkImage(existingImageUrl!)
-                      : newimage != null
-                          ? FileImage(
-                              File(newimage!.path),
-                            )
-                          : const AssetImage("assets/images/app_logo.png")
-                              as ImageProvider,
-                  radius: 100,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
-                child: TextFormField(
-                  controller: categorynamecontroller,
-                  decoration: InputDecoration(
-                      hintText: "Name",
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15))),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 20, left: 15, right: 15, bottom: 50),
-                child: TextFormField(
-                  controller: categorydescriptioncontroller,
-                  maxLines: 4,
-                  decoration: InputDecoration(
-                      hintText: "Description",
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15))),
-                ),
-              ),
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      fixedSize: Size(350, 60),
-                      backgroundColor: Colors.green.shade800,
-                      foregroundColor: Colors.white),
-                  onPressed: () {
-                    print("Button Precced----------------------------");
-                    FirebaseServices().addcategory(
-                        categoryId: widget.categoryModel?.id,
-                        categoryname: categorynamecontroller.text.toString(),
-                        description:
-                            categorydescriptioncontroller.text.toString(),
-                        image: newimage,
-                        context: context);
+      appBar: AppBar(
+        title: const Text("Category Manage Screen"),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: () async {
+                    await pickImage();
                   },
-                  child: Text(
-                    "Save",
-                    style: TextStyle(fontSize: 20),
-                  ))
-            ],
+                  child: CircleAvatar(
+                    radius: 50,
+                    // child: newImage != null
+                    //     ? Image.file(File(newImage!.path))
+                    //     : Icon(Icons.add),
+                    backgroundImage:
+                        existingImageUrl != null && newImage == null
+                            ? NetworkImage(existingImageUrl!)
+                            : newImage != null
+                                ? FileImage(
+                                    File(newImage!.path),
+                                  )
+                                : const AssetImage("assets/images/app_logo.png")
+                                    as ImageProvider,
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                TextFormField(
+                  controller: categoryName,
+                  decoration: const InputDecoration(
+                      border: null, labelText: "Enter Category Name"),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  controller: categoryDescription,
+                  maxLines: 5,
+                  decoration: const InputDecoration(
+                      border: null, labelText: "Enter Category Description"),
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                CommonBotton(
+                  isloading: isLoading,
+                  onPressed: () {
+                    addCategory(
+                        categoryName: categoryName.text.toString(),
+                        categoryDesc: categoryDescription.text.toString(),
+                        image: newImage);
+                  },
+                  text: widget.categoryModel != null
+                      ? "Update Category"
+                      : "Add Category",
+                )
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Future<void> pickImage({required source}) async {
+  Future<void> pickImage() async {
     final ImagePicker picker = ImagePicker();
 
-    final XFile? image = await picker.pickImage(source: source);
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
     if (image != null) {
       setState(() {
-        newimage = image;
-        print("File image path --> ${newimage!.path.toString()}");
+        newImage = image;
+        // print(newImage!.path);
+        log(newImage!.path);
       });
     }
+  }
+
+  Future<void> addCategory(
+      {required String categoryName,
+      required String categoryDesc,
+      required XFile? image}) async {
+    await FirebaseServicies().addCategoryInDataBase(
+        context: context,
+        categoryName: categoryName,
+        categoryDesc: categoryDesc,
+        image: newImage,
+        categoryId: widget.categoryModel?.id,
+        createdAt: widget.categoryModel?.createdAt,
+        existingImageUrl: widget.categoryModel?.imageUrl);
   }
 }
