@@ -112,48 +112,48 @@ class _ShopScreenState extends State<ShopScreen> {
         });
   }
 
-  allCatogoryWithProduct() {
-    return Container(
-      height: 200,
-      child: StreamBuilder(
-        stream: FirebaseServices().getAllCategory(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text("Error : ${snapshot.error}"),
-            );
-          } else if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    child: Column(
-                      children: [
-                        CircleAvatar(
-                          radius: 40,
-                          child: Image.network(snapshot.data![index].imageUrl),
-                        )
-                      ],
+    allCatogoryWithProduct() {
+      return Container(
+        height: 200,
+        child: StreamBuilder(
+          stream: FirebaseServices().getAllCategory(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text("Error : ${snapshot.error}"),
+              );
+            } else if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: snapshot.data!.length,
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      child: Column(
+                        children: [
+                          CircleAvatar(
+                            radius: 40,
+                            child: Image.network(snapshot.data![index].imageUrl),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            );
-          } else {
-            return Center(
-              child: Container(),
-            );
-          }
-        },
-      ),
-    );
-  }
+                  );
+                },
+              );
+            } else {
+              return Center(
+                child: Container(),
+              );
+            }
+          },
+        ),
+      );
+    }
 }
