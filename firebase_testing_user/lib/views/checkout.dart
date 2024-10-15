@@ -82,9 +82,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                     MaterialPageRoute(
                       builder: (context) => AddressListScreen(
                         orderData: OrderData(
-                          cartItems: cartList,
-                          totalAmount: totalPrice
-                        ),
+                            cartItems: cartList, totalAmount: totalPrice),
                       ),
                     ));
               },
@@ -95,8 +93,6 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   }
 
   Widget _buildCartList(List<Cart> cartItems) {
-
-
     cartList = cartItems;
     return ListView.builder(
       padding: const EdgeInsets.all(15),

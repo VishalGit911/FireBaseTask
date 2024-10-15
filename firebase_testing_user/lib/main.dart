@@ -10,8 +10,7 @@ Future<void> main() async {
           appId: "1:706813487245:android:0f50b2b102db5d2beadac4",
           messagingSenderId: "706813487245",
           projectId: "fir-testing-2e919",
-      storageBucket: "fir-testing-2e919.appspot.com"
-      ));
+          storageBucket: "fir-testing-2e919.appspot.com"));
   runApp(const MyApp());
 }
 
