@@ -43,7 +43,8 @@ class _OrderListScreenState extends State<OrderListScreen> {
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       subtitle: Text(
-                          'User ID : ${order.userId}\nPayment ID : ${order.paymentId}\nTotal Price : ${order.totalPrice}\nStatus: ${order.status}\nShpping Address : ${order.shippingAddress!.address}, ${order.shippingAddress!.addressLine1}, ${order.shippingAddress!.addressLine2}, ${order.shippingAddress!.city}, ${order.shippingAddress!.pinCode}, ${order.shippingAddress!.state}',),
+                        'User ID : ${order.userId}\nPayment ID : ${order.paymentId}\nTotal Price : ${order.totalPrice}\nStatus: ${order.status}\nShpping Address : ${order.shippingAddress!.address}, ${order.shippingAddress!.addressLine1}, ${order.shippingAddress!.addressLine2}, ${order.shippingAddress!.city}, ${order.shippingAddress!.pinCode}, ${order.shippingAddress!.state}',
+                      ),
                       trailing: IconButton(
                           onPressed: () async {
                             // setState(() {});

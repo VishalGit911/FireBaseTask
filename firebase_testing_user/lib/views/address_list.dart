@@ -1,4 +1,4 @@
-import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import '../firebase/firebase_servicies.dart';
@@ -50,9 +50,7 @@ class _AddressListScreenState extends State<AddressListScreen> {
           'name': 'Grocery Store',
 
           'contact': user.contact,
-          'prefill': {
-            'email': user.email ?? 'test@gmail.com'
-          },
+          'prefill': {'email': user.email ?? 'test@gmail.com'},
           'external': {
             'wallets': ['paytm']
           }
@@ -95,7 +93,6 @@ class _AddressListScreenState extends State<AddressListScreen> {
                   color: Colors.amber.shade50,
                   child: ListTile(
                     onTap: () {
-
                       widget.orderData.address = address;
                       openCheckOut(widget.orderData);
                     },
@@ -130,7 +127,7 @@ class _AddressListScreenState extends State<AddressListScreen> {
 // id payment success
   _handlePaymentSuccess(PaymentSuccessResponse response) {
     final String paymentId = response.paymentId!;
-     _storeOrderDetails(paymentId, widget.orderData);
+    _storeOrderDetails(paymentId, widget.orderData);
   }
 
   // if get error in payment time
@@ -142,7 +139,6 @@ class _AddressListScreenState extends State<AddressListScreen> {
   }
 
   _handleExternalWallet() {}
-
 
   void _storeOrderDetails(String paymentId, OrderData data) {
     Order order = Order(
@@ -164,7 +160,7 @@ class _AddressListScreenState extends State<AddressListScreen> {
           MaterialPageRoute(
             builder: (context) => const HomeScreen(),
           ),
-              (route) => false);
+          (route) => false);
     });
   }
 }
